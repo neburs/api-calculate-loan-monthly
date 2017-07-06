@@ -1,0 +1,6 @@
+#IDE
+.idea
+
+.gradle
+/build/
+/lib/
