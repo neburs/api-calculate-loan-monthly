@@ -2,9 +2,9 @@ package Domain.Application.CalculateMonthlyRePaymentActionTest;
 
 import Domain.Application.CalculateMonthlyRePaymentAction;
 import Domain.Application.Requests.CalculateMonthlyRePaymentRequest;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class CalculateMonthlyRePaymentActionTest {
     @Test
@@ -21,7 +21,8 @@ public class CalculateMonthlyRePaymentActionTest {
 
         assertEquals(
             76.71530969127662,
-            response
+            response,
+            0.0
         );
     }
 }
