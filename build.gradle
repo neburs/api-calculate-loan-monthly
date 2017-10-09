@@ -1,17 +1,28 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
 group 'app.api'
 version '1.0'
 
-apply plugin: 'java'
-
 sourceCompatibility = 1.8
+
+ext.docker = "${rootDir}/docker"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compile group: 'net.lingala.zip4j', name: 'zip4j', version: '1.3.2'
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'net.lingala.zip4j'            , name: 'zip4j'                , version: '1.3.2'
+    compile group: 'com.google.inject'            , name: 'guice'                , version: '4.1.0'
+    compile group: 'com.google.inject.extensions' , name: 'guice-assistedinject' , version: '4.1.0'
+    compile group: 'com.sun.jersey'               , name: 'jersey-server'        , version: '1.19'
+    compile group: 'com.sun.jersey'               , name: 'jersey-core'          , version: '1.19'
+    compile group: 'com.sun.jersey'               , name: 'jersey-servlet'       , version: '1.19'
+
+    testCompile group: 'junit'                    , name: 'junit'                , version: '4.12'
 }
 
 sourceSets {
@@ -27,6 +38,41 @@ sourceSets {
     }
 }
 
+tasks.withType(JavaCompile) {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    options.encoding = 'UTF-8'
+    options.compilerArgs << '-Xlint'
+    options.compilerArgs << '-deprecation'
+}
+
+clean {
+    delete fileTree(dir: docker, include: "**/${project.name}*.war")
+}
+
+task copyWarToDocker(type: Copy) {
+    def warCopySpec = copySpec {
+        from war.archivePath
+        rename { "${project.name}.war" }
+    }
+
+    dependsOn war
+    into(docker)
+    into('develop') { with warCopySpec }
+}
+
+war.finalizedBy(copyWarToDocker)
+
+test {
+    exclude '**/integration/**'
+
+    reports {
+        junitXml.enabled = true
+        html.enabled = true
+    }
+}
+
 jar {
     manifest {
         attributes(
@@ -38,4 +84,13 @@ jar {
             it.isDirectory() ? it : zipTree(it)
         }
     }
+}
+
+task integration(type: Test) {
+    dependsOn test
+    include '**/integration/**'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.2.1'
 }

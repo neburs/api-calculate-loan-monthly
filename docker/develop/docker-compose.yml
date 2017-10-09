@@ -1,0 +1,17 @@
+version: '3'
+
+networks:
+  dev-01-net:
+    driver: bridge
+
+services:
+  tomcat:
+    # Remember to move your war file into /usr/local/tomcat/webapps/ROOT (Rename your war file to ROOT.war)
+    image: quotecalc_image
+    build:
+      context: .
+    container_name: api-calculate-loan-monthly
+    networks:
+      - dev-01-net
+    ports:
+      - "8888:8080"
