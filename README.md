@@ -6,6 +6,27 @@ Formula used to calculate the monthly payment
     ------------------------------------  =>  --------------------------- = 76.715309691
       1 - (1 + interest) ^ (- quotes)              1 - (1 + 0.07)^-36
 
+**Structure**
+
+```
+api-calculate-loan-monthly
+├── docker/develop
+│   ├── docker-compose.yml  # File to mount the develop environment
+│   └── Dockerfile          # Instructions to build the container with tomcat and the app 
+│ 
+├── src  # datasets
+│   ├── main/java
+│   │   ├── app.Controllers    # Controllers to response the api
+│   │   └── Domain.Application # Bussines logical Actions
+│   └── tests
+│       └── ... # tests
+│   
+├── README.md
+├── build.gradle    # file to build the app
+└── settings.gradle # file to configure app 
+
+```
+
 
 **Requirements**
 
