@@ -12,6 +12,6 @@ public class indexController {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response home() {
-        return Response.ok("{'The api is live'}").build();
+        return Response.ok("{\"status\": \"The api is live\"}").build();
     }
 }
